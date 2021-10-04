@@ -1,11 +1,8 @@
 sonar.organization=wednesday-solutions
 sonar.projectKey=wednesday-solutions_devops-jest-and-githubactions
-
-# relative paths to source directories. More details and properties are described
-# in https://sonarcloud.io/documentation/project-administration/narrowing-the-focus/
 sonar.language=js
-sonar.sources=server
-sonar.tests=server
+sonar.sources=.
+sonar.tests=.
 sonar.exclusions=node_modules,coverage
 sonar.test.inclusions=**/*.test.js
 
