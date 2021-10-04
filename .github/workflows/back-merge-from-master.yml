@@ -3,6 +3,7 @@ on:
   push:
     branches: 
       - master
+      - qa
 jobs:
   merge-master-back-to-qa-and-dev:
     runs-on: ubuntu-latest
@@ -12,6 +13,7 @@ jobs:
       run: |
           git config --local user.email "github@wednesday.is"
           git config --local user.name "Github Actions"
+    
     - name: Merge master back to qa and dev
       run: |
           git fetch --unshallow
