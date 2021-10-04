@@ -1,0 +1,33 @@
+name: Jest badges
+on:
+  push:
+    branches: 
+      - master
+      - qa
+      - dev
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Set branch name
+        id: vars
+        run: echo ::set-output name=stage::${GITHUB_REF#refs/*/}
+
+      - name: Create badges
+        run: yarn run test:badges
+
+      - name: Commit badges
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: Gitflow
+          author_email: git@wednesday.is
+          message: 'Update badges'
+          add: 'badges/'
+          push: true
+      
