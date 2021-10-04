@@ -1,4 +1,4 @@
-name: PRs to master
+name: Backmerge from master
 on: 
   push:
     branches: 

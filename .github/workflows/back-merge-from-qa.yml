@@ -1,4 +1,4 @@
-name: PRs to master
+name: Backmerge from qa
 on: 
   push:
     branches: 
