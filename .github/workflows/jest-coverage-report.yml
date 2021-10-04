@@ -1,0 +1,42 @@
+name: Jest Coverage Report with Annotations (CI)
+on:
+  pull_request:
+    branches:
+      - master
+      - qa
+      - dev
+jobs:
+  coverage_report:
+    name: Jest Coverage Report
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install
+        run: yarn
+      - name: Test
+        run: yarn test
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        with:
+          args: >
+            -Dsonar.organization=wednesday-solutions
+            -Dsonar.projectKey=wednesday-solutions_devops-jest-and-githubactions
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
+      - name: Get Threshold
+        id: threshold
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: 'jest.config.json'
+          prop_path: 'coverageThreshold.global.statements'
+      - name: Test and generate coverage report
+        uses: artiomtr/jest-coverage-report-action@v2.0-rc.4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          threshold: ${{steps.threshold.outputs.prop}}
+          package-manager: yarn
+          custom-title: Jest Coverage Report

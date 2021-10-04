@@ -1,0 +1,6 @@
+<testExecutions version="1">
+<file path="index.test.js">
+<testCase name="health check API Check that health check API returns 200 on /" duration="36" />
+<testCase name="init should only invoke the app.listen when the NODE_ENV is not test" duration="2" />
+</file>
+</testExecutions>
