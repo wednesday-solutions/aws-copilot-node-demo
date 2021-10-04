@@ -1,0 +1,26 @@
+name: PRs to master
+on: 
+  push:
+    branches: 
+      - master
+jobs:
+  merge-master-back-to-qa-and-dev:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set Git config
+      run: |
+          git config --local user.email "github@wednesday.is"
+          git config --local user.name "Github Actions"
+    - name: Merge master back to qa and dev
+      run: |
+          git fetch --unshallow
+          git checkout qa
+          git pull
+          git merge --no-ff master -m "Auto-merge master back to qa"
+          git push
+          
+          git checkout dev
+          git pull
+          git merge --no-ff master -m "Auto-merge master back to dev"
+          git push
