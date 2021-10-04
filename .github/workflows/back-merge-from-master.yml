@@ -1,9 +1,8 @@
-name: PRs to master
+name: Backmerge from master
 on: 
   push:
     branches: 
       - master
-      - qa
 jobs:
   merge-master-back-to-qa-and-dev:
     runs-on: ubuntu-latest
