@@ -13,20 +13,20 @@
 
 ------- 
 
-## Back Merge 
 
-- [.github/workflows/back-merge-from-master.yml](.github/workflows/back-merge-from-master.yml#L17)
-- [.github/workflows/back-merge-from-qa.yml](.github/workflows/back-merge-from-qa.yml#L15)
+## Jest coverage reports and github annotations
 
-
-## Badge creation
-
-- [.github/workflows/jest-badges.yml](.github/workflows/jest-badges.yml#L22)
+- [.github/workflows/repo-health.yml](.github/workflows/repo-health.yml#L36)
 
 ## Sonarcloud
 
 - [.github/workflows/repo-health.yml](.github/workflows/repo-health.yml#L21)
 
-## Jest coverage reports and github annotations
+## Back Merge 
 
-- [.github/workflows/repo-health.yml](.github/workflows/repo-health.yml#L36)
+- [.github/workflows/back-merge-from-master.yml](.github/workflows/back-merge-from-master.yml#L17)
+- [.github/workflows/back-merge-from-qa.yml](.github/workflows/back-merge-from-qa.yml#L15)
+
+## Badge creation
+
+- [.github/workflows/jest-badges.yml](.github/workflows/jest-badges.yml#L22)
