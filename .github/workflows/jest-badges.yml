@@ -1,7 +1,7 @@
 name: Jest badges
 on:
   push:
-    branches: 
+    branches:
       - master
       - qa
       - dev
@@ -30,4 +30,3 @@ jobs:
           message: 'Update badges'
           add: 'badges/'
           push: true
-      
