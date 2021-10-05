@@ -38,9 +38,10 @@ jobs:
           path: 'jest.config.json'
           prop_path: 'coverageThreshold.global.statements'
       - name: Test and generate coverage report
-        uses: artiomtr/jest-coverage-report-action@v2.0-rc.4
+        uses: artiomtr/jest-coverage-report-action@v2.0-rc.5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           threshold: ${{steps.threshold.outputs.prop}}
           package-manager: yarn
           custom-title: Jest Coverage Report
+          skip-step: all

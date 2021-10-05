@@ -13,7 +13,7 @@
     ]
   ],
   "collectCoverageFrom": ["**/*.js", "!**/(dist|webpack|coverage|node_modules)/**", "!**/*.test.js"],
-  "coverageReporters": ["json-summary", "text", "lcov"],
+  "coverageReporters": ["json-summary", "text", "lcov", "text-summary"],
   "coverageThreshold": {
     "global": {
       "statements": 100,
