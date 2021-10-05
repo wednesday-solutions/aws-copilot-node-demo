@@ -1,6 +1,6 @@
 # Devops Jest Github Actions
 
-------- 
+---
 
 <div>
 <img src='./badges/badge-statements.svg' height="20"/>
@@ -11,8 +11,7 @@
 <img src='./badges/badge-functions.svg' height="20"/>
 </div>
 
-------- 
-
+---
 
 ## Jest coverage reports and github annotations
 
@@ -22,7 +21,7 @@
 
 - [.github/workflows/repo-health.yml](.github/workflows/repo-health.yml#L21)
 
-## Back Merge 
+## Back Merge
 
 - [.github/workflows/back-merge-from-master.yml](.github/workflows/back-merge-from-master.yml#L17)
 - [.github/workflows/back-merge-from-qa.yml](.github/workflows/back-merge-from-qa.yml#L15)

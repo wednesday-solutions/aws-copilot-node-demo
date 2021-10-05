@@ -26,7 +26,7 @@ jobs:
             -Dsonar.projectKey=wednesday-solutions_devops-jest-and-githubactions
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Get Threshold
         id: threshold
         uses: notiz-dev/github-action-json-property@release

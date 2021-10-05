@@ -1,19 +1,19 @@
 name: Backmerge from qa
-on: 
+on:
   push:
-    branches: 
+    branches:
       - qa
 jobs:
   merge-master-back-to-dev:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set Git config
-      run: |
+      - uses: actions/checkout@v2
+      - name: Set Git config
+        run: |
           git config --local user.email "github@wednesday.is"
           git config --local user.name "Github Actions"
-    - name: Merge master back to dev
-      run: |
+      - name: Merge master back to dev
+        run: |
           git fetch --unshallow
           git checkout dev
           git pull
