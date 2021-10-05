@@ -1,4 +1,4 @@
-name: Jest Coverage Report with Annotations (CI)
+name: CI
 on:
   pull_request:
     branches:
@@ -6,8 +6,8 @@ on:
       - qa
       - dev
 jobs:
-  coverage_report:
-    name: Jest Coverage Report
+  complete_ci:
+    name: CI
     runs-on: ubuntu-latest
     strategy:
       matrix:

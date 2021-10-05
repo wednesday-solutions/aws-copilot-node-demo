@@ -6,7 +6,7 @@ on:
       - qa
       - dev
 jobs:
-  build-and-deploy:
+  craete-and-push-badges:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
