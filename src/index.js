@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 
-const app = express();
-function init () {
+export const app = express();
+export function init() {
   app.use(express.urlencoded({ extended: true }));
   app.get('/', (req, res) => {
     console.log('Health check api');
@@ -13,4 +13,3 @@ function init () {
   }
 }
 init();
-module.exports = { app, init };
