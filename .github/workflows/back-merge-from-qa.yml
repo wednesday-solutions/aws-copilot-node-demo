@@ -4,7 +4,7 @@ on:
     branches:
       - qa
 jobs:
-  merge-master-back-to-dev:
+  merge-main-back-to-dev:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,10 +14,10 @@ jobs:
         run: |
           git config --local user.email "github@wednesday.is"
           git config --local user.name "Github Actions"
-      - name: Merge master back to dev
+      - name: Merge qa back to dev
         run: |
           git fetch --unshallow
           git checkout dev
           git pull
-          git merge --no-ff qa -m "Auto-merge master back to dev"
+          git merge --no-ff qa -m "Auto-merge qa back to dev"
           git push

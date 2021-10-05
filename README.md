@@ -23,7 +23,7 @@
 
 ## Back Merge
 
-- [.github/workflows/back-merge-from-master.yml](.github/workflows/back-merge-from-master.yml#L17)
+- [.github/workflows/back-merge-from-main.yml](.github/workflows/back-merge-from-main.yml#L17)
 - [.github/workflows/back-merge-from-qa.yml](.github/workflows/back-merge-from-qa.yml#L15)
 
 ## Badge creation

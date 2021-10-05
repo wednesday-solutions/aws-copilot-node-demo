@@ -2,7 +2,7 @@ name: Jest badges
 on:
   push:
     branches:
-      - master
+      - main
       - qa
       - dev
 jobs:
