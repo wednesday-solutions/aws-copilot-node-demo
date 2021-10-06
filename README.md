@@ -29,3 +29,28 @@
 ## Badge creation
 
 - [.github/workflows/jest-badges.yml](.github/workflows/jest-badges.yml#L22)
+
+## Usage
+
+### Create infrastructure
+
+```
+./scripts/setup-ecs.sh demo dev
+```
+
+Make sure that the manifest.yml has http.path: '/'
+
+```
+http:
+  # Requests to this path will be forwarded to your service.
+  # To match all requests you can use the "/" path.
+  path: '/'
+  # You can specify a custom health check path. The default is "/".
+  # healthcheck: '/'
+```
+
+### Update infrastructure
+
+```
+./scripts/update-ecs.sh demo dev
+```

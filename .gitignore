@@ -4,3 +4,4 @@ coverage/
 reports
 dist
 report.json
+.DS_Store
