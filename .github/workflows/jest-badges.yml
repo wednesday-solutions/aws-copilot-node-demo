@@ -6,7 +6,7 @@ on:
       - qa
       - dev
 jobs:
-  craete-and-push-badges:
+  create-and-push-badges:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

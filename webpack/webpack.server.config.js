@@ -3,6 +3,7 @@
  */
 const webpack = require('webpack');
 
+console.log(process.env);
 module.exports = (options = {}) => ({
   mode: options.mode,
   entry: options.entry,

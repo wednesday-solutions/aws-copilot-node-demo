@@ -7,6 +7,7 @@
     "start:dist": "node ./dist/main.js",
     "build": "export ENVIRONMENT_NAME=production && rm -rf dist && webpack --mode production --config webpack/webpack.prod.config.js",
     "build:local": "export ENVIRONMENT_NAME=local && rm -rf dist && webpack --mode development --config  webpack/webpack.dev.config.js",
+    "build:production": "export ENVIRONMENT_NAME=production && rm -rf dist && webpack --mode development --config  webpack/webpack.prod.config.js",
     "start:local": "kill-port 9000 && yarn build:local && node dist/main.js",
     "start": "node dist/main.js",
     "test": "jest --coverage --ci  --testLocationInResults  --silent --json --outputFile=\"report.json\" ",
