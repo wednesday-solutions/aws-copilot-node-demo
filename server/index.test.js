@@ -11,9 +11,17 @@ describe('health check API', () => {
 describe('init', () => {
   it('should only invoke the app.listen when the NODE_ENV is not test', () => {
     process.env.NODE_ENV = 'production';
+    process.env.DEMOCLUSTER_SECRET = JSON.stringify({
+      username: 'username',
+      host: 'host',
+      dbname: 'dbname',
+      password: 'password',
+      port: 'port'
+    });
     const listenSpy = jest.spyOn(app, 'listen').mockReturnValue({});
     init();
     expect(listenSpy).toBeCalled();
     process.env.NODE_ENV = 'test';
+    process.env.DEMOCLUSTER_SECRET = null;
   });
 });
