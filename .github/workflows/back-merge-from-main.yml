@@ -4,7 +4,7 @@ on:
     branches:
       - main
 jobs:
-  merge-main-back-to-qa-and-dev:
+  merge-main-back-to-qa:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
