@@ -35,7 +35,7 @@
 ### Create infrastructure
 
 ```
-./scripts/setup-ecs.sh demo dev
+./scripts/setup-ecs.sh demo qa
 ```
 
 Make sure that the manifest.yml has http.path: '/'
@@ -52,5 +52,5 @@ http:
 ### Update infrastructure
 
 ```
-./scripts/update-ecs.sh demo dev
+./scripts/update-ecs.sh demo qa
 ```

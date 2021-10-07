@@ -15,15 +15,10 @@ jobs:
           git config --local user.email "github@wednesday.is"
           git config --local user.name "Github Actions"
 
-      - name: Merge main back to qa and dev
+      - name: Merge main back to qa
         run: |
           git fetch --unshallow
           git checkout qa
           git pull
           git merge --no-ff main -m "Auto-merge main back to qa"
-          git push
-
-          git checkout dev
-          git pull
-          git merge --no-ff main -m "Auto-merge main back to dev"
           git push
