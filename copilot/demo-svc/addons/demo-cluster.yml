@@ -4,59 +4,59 @@ Parameters:
     Description: Your application's name.
   Env:
     Type: String
-    Description: The environment name your service, job, or workflow is being deployed to.
+    Description: 'The environment name your service, job, or workflow is being deployed to.'
   Name:
     Type: String
-    Description: The name of the service, job, or workflow being deployed.
-  # Customize your Aurora Serverless cluster by setting the default value of the following parameters.
+    Description: 'The name of the service, job, or workflow being deployed.'
+    # Customize your Aurora Serverless cluster by setting the default value of the following parameters.
+
   democlusterDBName:
     Type: String
     Description: The name of the initial database to be created in the DB cluster.
     Default: demo_db
-    # Cannot have special characters
+    # Customize your Aurora Serverless cluster by setting the default value of the following parameters.
     # Naming constraints: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html#RDS_Limits.Constraints
   democlusterDBAutoPauseSeconds:
     Type: Number
     Description: The duration in seconds before the cluster pauses.
     Default: 1000
 Mappings:
-  democlusterEnvScalingConfigurationMap: 
+  democlusterEnvScalingConfigurationMap:
     dev:
-      "DBMinCapacity": 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      "DBMaxCapacity": 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      
+      'DBMinCapacity': 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
+      'DBMaxCapacity': 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
+
     demo:
-      "DBMinCapacity": 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      "DBMaxCapacity": 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      
+      'DBMinCapacity': 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
+      'DBMaxCapacity': 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
+
     All:
-      "DBMinCapacity": 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      "DBMaxCapacity": 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      
+      'DBMinCapacity': 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
+      'DBMaxCapacity': 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
 
 Resources:
   democlusterDBSubnetGroup:
     Type: 'AWS::RDS::DBSubnetGroup'
     Properties:
       DBSubnetGroupDescription: Group of Copilot private subnets for Aurora cluster.
-      SubnetIds:
-        !Split [',', { 'Fn::ImportValue': !Sub '${App}-${Env}-PrivateSubnets' }]
+      SubnetIds: !Split
+        - ','
+        - 'Fn::ImportValue': !Sub '${App}-${Env}-PrivateSubnets'
   democlusterSecurityGroup:
     Metadata:
-      'aws:copilot:description': 'A security group for your workload to access the DB cluster democluster'
+      'aws:copilot:description': A security group for your workload to access the DB cluster democluster
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: !Sub 'The Security Group for ${Name} to access DB cluster democluster.'
       VpcId:
-        Fn::ImportValue:
-          !Sub '${App}-${Env}-VpcId'
+        'Fn::ImportValue': !Sub '${App}-${Env}-VpcId'
       Tags:
         - Key: Name
           Value: !Sub 'copilot-${App}-${Env}-${Name}-Aurora'
   democlusterDBClusterSecurityGroup:
     Metadata:
-      'aws:copilot:description': 'A security group for your DB cluster democluster'
-    Type: AWS::EC2::SecurityGroup
+      'aws:copilot:description': A security group for your DB cluster democluster
+    Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: The Security Group for the database cluster.
       SecurityGroupIngress:
@@ -66,40 +66,47 @@ Resources:
           Description: !Sub 'From the Aurora Security Group of the workload ${Name}.'
           SourceSecurityGroupId: !Ref democlusterSecurityGroup
       VpcId:
-        Fn::ImportValue:
-          !Sub '${App}-${Env}-VpcId'
+        'Fn::ImportValue': !Sub '${App}-${Env}-VpcId'
   democlusterAuroraSecret:
     Metadata:
-      'aws:copilot:description': 'A Secrets Manager secret to store your DB credentials'
-    Type: AWS::SecretsManager::Secret
+      'aws:copilot:description': A Secrets Manager secret to store your DB credentials
+    Type: 'AWS::SecretsManager::Secret'
     Properties:
-      Description: !Sub Aurora main user secret for ${AWS::StackName}
+      Description: !Sub 'Aurora main user secret for ${AWS::StackName}'
       GenerateSecretString:
         SecretStringTemplate: '{"username": "postgres"}'
-        GenerateStringKey: "password"
+        GenerateStringKey: password
         ExcludePunctuation: true
         IncludeSpace: false
         PasswordLength: 16
   democlusterDBClusterParameterGroup:
     Metadata:
-      'aws:copilot:description': 'A DB parameter group for engine configuration values'
+      'aws:copilot:description': A DB parameter group for engine configuration values
     Type: 'AWS::RDS::DBClusterParameterGroup'
     Properties:
       Description: !Ref 'AWS::StackName'
-      Family: 'aurora-postgresql10'
+      Family: aurora-postgresql10
       Parameters:
-        client_encoding: 'UTF8'
+        client_encoding: UTF8
   democlusterDBCluster:
     Metadata:
-      'aws:copilot:description': 'The democluster Aurora Serverless database cluster'
+      'aws:copilot:description': The democluster Aurora Serverless database cluster
+      'AWS::CloudFormation::Designer':
+        id: 6b1f4ac5-112b-4b00-8e89-fdf8891631e6
     Type: 'AWS::RDS::DBCluster'
     Properties:
-      MasterUsername:
-        !Join [ "",  [ '{{resolve:secretsmanager:', !Ref democlusterAuroraSecret, ":SecretString:username}}" ]]
-      MasterUserPassword:
-        !Join [ "",  [ '{{resolve:secretsmanager:', !Ref democlusterAuroraSecret, ":SecretString:password}}" ]]
+      MasterUsername: !Join
+        - ''
+        - - '{{resolve:secretsmanager:'
+          - !Ref democlusterAuroraSecret
+          - ':SecretString:username}}'
+      MasterUserPassword: !Join
+        - ''
+        - - '{{resolve:secretsmanager:'
+          - !Ref democlusterAuroraSecret
+          - ':SecretString:password}}'
       DatabaseName: !Ref democlusterDBName
-      Engine: 'aurora-postgresql'
+      Engine: aurora-postgresql
       EngineVersion: '10.12'
       EngineMode: serverless
       DBClusterParameterGroupName: !Ref democlusterDBClusterParameterGroup
@@ -108,20 +115,53 @@ Resources:
         - !Ref democlusterDBClusterSecurityGroup
       ScalingConfiguration:
         AutoPause: true
-        # Replace "All" below with "!Ref Env" to set different autoscaling limits per environment.
-        MinCapacity: !FindInMap [democlusterEnvScalingConfigurationMap, All, DBMinCapacity]
-        MaxCapacity: !FindInMap [democlusterEnvScalingConfigurationMap, All, DBMaxCapacity]
+        MinCapacity: !FindInMap
+          - democlusterEnvScalingConfigurationMap
+          - All
+          - DBMinCapacity
+        MaxCapacity: !FindInMap
+          - democlusterEnvScalingConfigurationMap
+          - All
+          - DBMaxCapacity
         SecondsUntilAutoPause: !Ref democlusterDBAutoPauseSeconds
   democlusterSecretAuroraClusterAttachment:
-    Type: AWS::SecretsManager::SecretTargetAttachment
+    Type: 'AWS::SecretsManager::SecretTargetAttachment'
     Properties:
       SecretId: !Ref democlusterAuroraSecret
       TargetId: !Ref democlusterDBCluster
-      TargetType: AWS::RDS::DBCluster
+      TargetType: 'AWS::RDS::DBCluster'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: f9d52ea0-57e5-4d16-9f80-13d28a030d3a
+  ElastiCacheSubnetGroup:
+    Type: 'AWS::ElastiCache::SubnetGroup'
+    Properties:
+      Description: 'ElastiCache Subnet'
+      SubnetIds: !Split
+        - ','
+        - 'Fn::ImportValue': !Sub '${App}-${Env}-PrivateSubnets'
+  ElastiCacheCluster:
+    Type: 'AWS::ElastiCache::CacheCluster'
+    Properties:
+      CacheSubnetGroupName: !Ref ElastiCacheSubnetGroup
+      VpcSecurityGroupIds:
+        - !Ref democlusterSecurityGroup
+      CacheNodeType: 'cache.t2.micro'
+      Engine: 'redis'
+      NumCacheNodes: 1
 Outputs:
-  democlusterSecret: # injected as DEMOCLUSTER_SECRET environment variable by Copilot.
-    Description: "The JSON secret that holds the database username and password. Fields are 'host', 'port', 'dbname', 'username', 'password', 'dbClusterIdentifier' and 'engine'"
+  democlusterSecret:
+    Description: >-
+      The JSON secret that holds the database username and password. Fields are
+      'host', 'port', 'dbname', 'username', 'password', 'dbClusterIdentifier'
+      and 'engine'
     Value: !Ref democlusterAuroraSecret
   democlusterSecurityGroup:
-    Description: "The security group to attach to the workload."
+    Description: The security group to attach to the workload.
     Value: !Ref democlusterSecurityGroup
+  cacheHost:
+    Description: Cache host name
+    Value: !GetAtt ElastiCacheCluster.RedisEndpoint.Address
+  cachePort:
+    Description: Cache host name
+    Value: !GetAtt ElastiCacheCluster.RedisEndpoint.Port
