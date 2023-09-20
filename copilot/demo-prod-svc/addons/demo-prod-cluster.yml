@@ -20,35 +20,33 @@ Parameters:
     Description: The duration in seconds before the cluster pauses.
     Default: 1000
 Mappings:
-  demoprodclusterEnvScalingConfigurationMap: 
+  demoprodclusterEnvScalingConfigurationMap:
     qa:
-      "DBMinCapacity": 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      "DBMaxCapacity": 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      
+      'DBMinCapacity': 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
+      'DBMaxCapacity': 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
+
     prod:
-      "DBMinCapacity": 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      "DBMaxCapacity": 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      
+      'DBMinCapacity': 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
+      'DBMaxCapacity': 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
+
     dev:
-      "DBMinCapacity": 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      "DBMaxCapacity": 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      
+      'DBMinCapacity': 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
+      'DBMaxCapacity': 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
+
     demo:
-      "DBMinCapacity": 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      "DBMaxCapacity": 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      
+      'DBMinCapacity': 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
+      'DBMaxCapacity': 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
+
     All:
-      "DBMinCapacity": 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      "DBMaxCapacity": 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
-      
+      'DBMinCapacity': 2 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
+      'DBMaxCapacity': 8 # AllowedValues: [2, 4, 8, 16, 32, 64, 192, 384]
 
 Resources:
   demoprodclusterDBSubnetGroup:
     Type: 'AWS::RDS::DBSubnetGroup'
     Properties:
       DBSubnetGroupDescription: Group of Copilot private subnets for Aurora cluster.
-      SubnetIds:
-        !Split [',', { 'Fn::ImportValue': !Sub '${App}-${Env}-PrivateSubnets' }]
+      SubnetIds: !Split [',', { 'Fn::ImportValue': !Sub '${App}-${Env}-PrivateSubnets' }]
   demoprodclusterSecurityGroup:
     Metadata:
       'aws:copilot:description': 'A security group for your workload to access the DB cluster demoprodcluster'
@@ -56,8 +54,7 @@ Resources:
     Properties:
       GroupDescription: !Sub 'The Security Group for ${Name} to access DB cluster demoprodcluster.'
       VpcId:
-        Fn::ImportValue:
-          !Sub '${App}-${Env}-VpcId'
+        Fn::ImportValue: !Sub '${App}-${Env}-VpcId'
       Tags:
         - Key: Name
           Value: !Sub 'copilot-${App}-${Env}-${Name}-Aurora'
@@ -74,8 +71,7 @@ Resources:
           Description: !Sub 'From the Aurora Security Group of the workload ${Name}.'
           SourceSecurityGroupId: !Ref demoprodclusterSecurityGroup
       VpcId:
-        Fn::ImportValue:
-          !Sub '${App}-${Env}-VpcId'
+        Fn::ImportValue: !Sub '${App}-${Env}-VpcId'
   demoprodclusterAuroraSecret:
     Metadata:
       'aws:copilot:description': 'A Secrets Manager secret to store your DB credentials'
@@ -84,7 +80,7 @@ Resources:
       Description: !Sub Aurora main user secret for ${AWS::StackName}
       GenerateSecretString:
         SecretStringTemplate: '{"username": "postgres"}'
-        GenerateStringKey: "password"
+        GenerateStringKey: 'password'
         ExcludePunctuation: true
         IncludeSpace: false
         PasswordLength: 16
@@ -103,9 +99,9 @@ Resources:
     Type: 'AWS::RDS::DBCluster'
     Properties:
       MasterUsername:
-        !Join [ "",  [ '{{resolve:secretsmanager:', !Ref demoprodclusterAuroraSecret, ":SecretString:username}}" ]]
+        !Join ['', ['{{resolve:secretsmanager:', !Ref demoprodclusterAuroraSecret, ':SecretString:username}}']]
       MasterUserPassword:
-        !Join [ "",  [ '{{resolve:secretsmanager:', !Ref demoprodclusterAuroraSecret, ":SecretString:password}}" ]]
+        !Join ['', ['{{resolve:secretsmanager:', !Ref demoprodclusterAuroraSecret, ':SecretString:password}}']]
       DatabaseName: !Ref demoprodclusterDBName
       Engine: 'aurora-postgresql'
       EngineVersion: '10.12'
@@ -126,10 +122,33 @@ Resources:
       SecretId: !Ref demoprodclusterAuroraSecret
       TargetId: !Ref demoprodclusterDBCluster
       TargetType: AWS::RDS::DBCluster
+  ElastiCacheSubnetGroup:
+    Type: 'AWS::ElastiCache::SubnetGroup'
+    Properties:
+      Description: 'ElastiCache Subnet'
+      SubnetIds: !Split
+        - ','
+        - 'Fn::ImportValue': !Sub '${App}-${Env}-PrivateSubnets'
+  ElastiCacheCluster:
+    Type: 'AWS::ElastiCache::CacheCluster'
+    Properties:
+      CacheSubnetGroupName: !Ref ElastiCacheSubnetGroup
+      VpcSecurityGroupIds:
+        - !Ref demoprodclusterSecurityGroup
+      CacheNodeType: 'cache.t2.micro'
+      Engine: 'redis'
+      NumCacheNodes: 1
+
 Outputs:
   demoprodclusterSecret: # injected as DEMOPRODCLUSTER_SECRET environment variable by Copilot.
     Description: "The JSON secret that holds the database username and password. Fields are 'host', 'port', 'dbname', 'username', 'password', 'dbClusterIdentifier' and 'engine'"
     Value: !Ref demoprodclusterAuroraSecret
   demoprodclusterSecurityGroup:
-    Description: "The security group to attach to the workload."
+    Description: 'The security group to attach to the workload.'
     Value: !Ref demoprodclusterSecurityGroup
+  cacheHost:
+    Description: Cache host name
+    Value: !GetAtt ElastiCacheCluster.RedisEndpoint.Address
+  cachePort:
+    Description: Cache host name
+    Value: !GetAtt ElastiCacheCluster.RedisEndpoint.Port

@@ -1,5 +1,7 @@
 import express from 'express';
 
+import './cache';
+
 export const app = express();
 export function init() {
   try {
